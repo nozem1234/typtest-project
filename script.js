@@ -10,7 +10,6 @@ let getyptewoorden = 0;
 let getyptekarakters = 0;
 
 function starttest() {
-
     function starttimer() {
         let tijdover = 5;
         countdowninterval = setInterval(function () {
@@ -53,7 +52,8 @@ function starttest() {
     }
 
     function toonresultaten() {
-        woordelement.textContent = `aantal goedgetypte woorden: ${getyptewoorden}, aantal karakters: ${getyptekarakters}`;
+        woordelement.textContent = `aantal goedgetypte woorden: ${getyptewoorden}, aantal karakters: 
+        ${getyptekarakters}`;
     }
 
     starttimer();
