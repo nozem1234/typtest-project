@@ -27,9 +27,9 @@ function starttest() {
     }
 
     async function haalwoordop() {
-        const response = await fetch("https://random-word-bit.vercel.app/word");
+        const response = await fetch("https://random-word-api.vercel.app/api");
         const woord = await response.json();
-        return woord[0].word.toLowerCase();
+        return woord[0].toLowerCase();
     }
 
     async function updatewoordweergave() {
