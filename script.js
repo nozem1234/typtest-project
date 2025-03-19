@@ -1,66 +1,66 @@
-const start = document.getElementById("start-button");
-const timer = document.getElementById("timer");
-const woorden = document.querySelector("h2");
-const input = document.getElementById("input-field");
-const resultaat = document.getElementById("resultaat");
+const startknop = document.getElementById("start-button");
+const timerelement = document.getElementById("timer");
+const woordelement = document.querySelector("h2");
+const invoerveld = document.getElementById("input-field");
+const resultaatElement = document.getElementById("resultaat");
 
-let countdownInterval;
-let currentWord = "";
-let typedWords = 0;
-let typedCharacters = 0;
+let countdowninterval;
+let huidigwoord = "";
+let getyptewoorden = 0;
+let getyptekarakters = 0;
 
 function starttest() {
 
     function starttimer() {
-        let timeLeft = 60;
-        countdownInterval = setInterval(function () {
-            if (timeLeft > 0) {
-                timeLeft--;
-                timer.textContent = timeLeft;
+        let tijdover = 5;
+        countdowninterval = setInterval(function () {
+            if (tijdover > 0) {
+                tijdover--;
+                timerelement.textContent = tijdover;
             } else {
-                clearInterval(countdownInterval);
-                timer.textContent = "tijd is om!";
-                input.disabled = true;
-                input.removeEventListener("input", checkInput);
-                showresults();
+                clearInterval(countdowninterval);
+                timerelement.textContent = "tijd is om!";
+                invoerveld.disabled = true;
+                invoerveld.removeEventListener("input", controleerinvoer);
+                toonresultaten();
             }
         }, 1000);
     }
 
-    async function getWord() {
+    async function haalwoordop() {
         const response = await fetch("https://random-word-bit.vercel.app/word");
-        const word = await response.json();
-        return word[0].word.toLowerCase();
+        const woord = await response.json();
+        return woord[0].word.toLowerCase();
     }
 
-    async function updateWordDisplay() {
-        currentWord = await getWord();
-        woorden.textContent = currentWord;
+    async function updatewoordweergave() {
+        huidigwoord = await haalwoordop();
+        woordelement.textContent = huidigwoord;
     }
 
-    function startdisplay() {
-        start.style.display = "none";
+    function startweergave() {
+        startknop.style.display = "none";
     }
 
-    function checkInput() {
-        const typedWord = input.value.trim().toLowerCase();
-        if (typedWord === currentWord) {
-            input.value = "";
-            updateWordDisplay();
-            typedWords++;
-            typedCharacters += typedWord.length;
+    function controleerinvoer() {
+        const getyptwoord = invoerveld.value.trim().toLowerCase();
+        if (getyptwoord === huidigwoord) {
+            invoerveld.value = "";
+            updatewoordweergave();
+            getyptewoorden++;
+            getyptekarakters += getyptwoord.length;
         }
     }
 
-    function showresults() {
-        woorden.textContent = `Aantal goedgetypte woorden: ${typedWords}, Aantal karakters: ${typedCharacters}`;
+    function toonresultaten() {
+        woordelement.textContent = `aantal goedgetypte woorden: ${getyptewoorden}, aantal karakters: ${getyptekarakters}`;
     }
 
     starttimer();
-    startdisplay();
-    updateWordDisplay();
+    startweergave();
+    updatewoordweergave();
 
-    input.addEventListener("input", checkInput);
+    invoerveld.addEventListener("input", controleerinvoer);
 }
 
-start.addEventListener("click", starttest);
+startknop.addEventListener("click", starttest);
