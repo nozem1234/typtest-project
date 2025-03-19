@@ -52,8 +52,8 @@ function starttest() {
     }
 
     function toonresultaten() {
-        woordelement.textContent = `aantal goedgetypte woorden: ${getyptewoorden}, aantal karakters: 
-        ${getyptekarakters}`;
+        woordelement.innerHTML = `aantal goedgetypte woorden: <span style="color: red;">${getyptewoorden}</span>,
+         aantal karakters: <span style="color: red;">${getyptekarakters}</span>`;
     }
 
     starttimer();
