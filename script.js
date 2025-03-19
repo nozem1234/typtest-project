@@ -11,7 +11,7 @@ let getyptekarakters = 0;
 
 function starttest() {
     function starttimer() {
-        let tijdover = 5;
+        let tijdover = 60;
         countdowninterval = setInterval(function () {
             if (tijdover > 0) {
                 tijdover--;
