@@ -10,15 +10,23 @@ let getyptewoorden = 0;
 let getyptekarakters = 0;
 
 function starttest() {
+    getyptewoorden = 0;
+    getyptekarakters = 0;
+    timerelement.textContent = "60";
+    invoerveld.disabled = false;
+    invoerveld.value = "";
+    invoerveld.focus();
+
     function starttimer() {
         let tijdover = 60;
+
         countdowninterval = setInterval(function () {
             if (tijdover > 0) {
                 tijdover--;
                 timerelement.textContent = tijdover;
             } else {
                 clearInterval(countdowninterval);
-                timerelement.textContent = "tijd is om!";
+                timerelement.textContent = "Tijd is om!";
                 invoerveld.disabled = true;
                 invoerveld.removeEventListener("input", controleerinvoer);
                 toonresultaten();
@@ -27,9 +35,14 @@ function starttest() {
     }
 
     async function haalwoordop() {
-        const response = await fetch("https://random-word-api.vercel.app/api");
-        const woord = await response.json();
-        return woord[0].toLowerCase();
+        try {
+            const response = await fetch("https://random-words-api.vercel.app/word/dutch");
+            const data = await response.json();
+            return data[0].word.toLowerCase();
+        } catch (error) {
+            console.error("API fout:", error);
+            return "computer";
+        }
     }
 
     async function updatewoordweergave() {
@@ -43,23 +56,28 @@ function starttest() {
 
     function controleerinvoer() {
         const getyptwoord = invoerveld.value.trim().toLowerCase();
+
         if (getyptwoord === huidigwoord) {
-            invoerveld.value = "";
-            updatewoordweergave();
             getyptewoorden++;
             getyptekarakters += getyptwoord.length;
+
+            invoerveld.value = "";
+            updatewoordweergave();
         }
     }
 
     function toonresultaten() {
-        woordelement.innerHTML = `aantal goedgetypte woorden: <span style="color: red;">${getyptewoorden}</span>,
-         aantal karakters: <span style="color: red;">${getyptekarakters}</span>`;
+        woordelement.innerHTML = `
+            Aantal goed getypte woorden:
+            <span style="color:red;">${getyptewoorden}</span><br>
+            Aantal karakters:
+            <span style="color:red;">${getyptekarakters}</span>
+        `;
     }
 
     starttimer();
     startweergave();
     updatewoordweergave();
-
     invoerveld.addEventListener("input", controleerinvoer);
 }
 
