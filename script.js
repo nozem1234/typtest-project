@@ -10,15 +10,16 @@ let getyptewoorden = 0;
 let getyptekarakters = 0;
 
 function starttest() {
+
     getyptewoorden = 0;
     getyptekarakters = 0;
-    timerelement.textContent = "60";
     invoerveld.disabled = false;
     invoerveld.value = "";
     invoerveld.focus();
 
     function starttimer() {
         let tijdover = 60;
+        timerelement.textContent = tijdover;
 
         countdowninterval = setInterval(function () {
             if (tijdover > 0) {
@@ -36,18 +37,26 @@ function starttest() {
 
     async function haalwoordop() {
         try {
-            const response = await fetch("https://random-words-api.vercel.app/word/dutch");
+            const response = await fetch("https://random-word-api.herokuapp.com/word?number=1");
+
+            if (!response.ok) {
+                throw new Error("API werkt niet");
+            }
+
             const data = await response.json();
-            return data[0].word.toLowerCase();
+            return data[0].toLowerCase();
         } catch (error) {
-            console.error("API fout:", error);
-            return "computer";
+            console.error("Fout bij ophalen woord:", error);
+            woordelement.textContent = "API fout";
+            return "";
         }
     }
 
     async function updatewoordweergave() {
         huidigwoord = await haalwoordop();
-        woordelement.textContent = huidigwoord;
+        if (huidigwoord) {
+            woordelement.textContent = huidigwoord;
+        }
     }
 
     function startweergave() {
@@ -57,10 +66,9 @@ function starttest() {
     function controleerinvoer() {
         const getyptwoord = invoerveld.value.trim().toLowerCase();
 
-        if (getyptwoord === huidigwoord) {
+        if (getyptwoord === huidigwoord && huidigwoord !== "") {
             getyptewoorden++;
             getyptekarakters += getyptwoord.length;
-
             invoerveld.value = "";
             updatewoordweergave();
         }
@@ -78,6 +86,8 @@ function starttest() {
     starttimer();
     startweergave();
     updatewoordweergave();
+
+    invoerveld.removeEventListener("input", controleerinvoer);
     invoerveld.addEventListener("input", controleerinvoer);
 }
 
